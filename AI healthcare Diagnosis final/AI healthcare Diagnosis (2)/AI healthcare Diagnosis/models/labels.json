@@ -1,0 +1,46 @@
+{
+    "xray": [
+        "Pneumonia",
+        "Pleural Effusion",
+        "Atelectasis",
+        "Cardiomegaly",
+        "Consolidation",
+        "Edema",
+        "Emphysema",
+        "Fibrosis",
+        "Hernia",
+        "Infiltration",
+        "Mass",
+        "Nodule",
+        "Pneumothorax",
+        "Normal"
+    ],
+    "mri": [
+        "Brain Tumor",
+        "Multiple Sclerosis",
+        "Stroke",
+        "Hemorrhage",
+        "Aneurysm",
+        "Normal Brain",
+        "Spinal Cord Injury",
+        "Disc Herniation",
+        "Spinal Stenosis",
+        "Degenerative Disease",
+        "Inflammation",
+        "Normal Spine"
+    ],
+    "ct": [
+        "Pulmonary Embolism",
+        "Lung Cancer",
+        "COVID-19",
+        "Liver Lesion",
+        "Kidney Stone",
+        "Appendicitis",
+        "Bowel Obstruction",
+        "Pancreatitis",
+        "Aortic Aneurysm",
+        "Bone Fracture",
+        "Lymphadenopathy",
+        "Normal"
+    ]
+} 

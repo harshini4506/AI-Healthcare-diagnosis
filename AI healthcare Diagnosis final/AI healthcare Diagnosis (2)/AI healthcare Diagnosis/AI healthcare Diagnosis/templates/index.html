@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Healthcare Diagnosis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+    body {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9)),
+                    url('https://img.freepik.com/free-photo/medical-banner-with-stethoscope_23-2149611199.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+    }
+
+    .navbar {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-section {
+        background: linear-gradient(135deg, rgba(13, 110, 253, 0.9), rgba(13, 202, 240, 0.9));
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        color: white;
+        border-radius: 0 0 2rem 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-section h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-section p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+    }
+
+    .card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: rgba(255, 255, 255, 0.95);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        color: white;
+        padding: 1.5rem;
+        border-bottom: none;
+    }
+
+    .card-header h5 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .drop-zone {
+        position: relative;
+        border: 2px dashed #dee2e6;
+        border-radius: 1rem;
+        padding: 2.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.95);
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    .drop-zone.dragover {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+
+    .drop-zone.report-upload.dragover {
+        border-color: #0dcaf0;
+        background-color: rgba(13, 202, 240, 0.05);
+    }
+
+    .drop-zone-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .drop-zone-content i {
+        font-size: 3rem;
+        color: #0d6efd;
+        margin-bottom: 1rem;
+    }
+
+    .choose-file-btn {
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .choose-file-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .report-section {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .report-section h4 {
+        color: #0d6efd;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .report-section li {
+        padding: 1rem;
+        border-bottom: 1px solid #f8f9fa;
+        transition: background-color 0.3s ease;
+    }
+
+    .report-section li:hover {
+        background-color: #f8f9fa;
+    }
+
+    .report-section li:last-child {
+        border-bottom: none;
+    }
+
+    .footer {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        color: white;
+        padding: 3rem 0;
+        margin-top: 4rem;
+    }
+
+    .footer h5 {
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        color: #0d6efd;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 0.5rem;
+    }
+
+    .loading i {
+        font-size: 1.5rem;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #0d6efd;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #0dcaf0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 3rem 0;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .drop-zone {
+            padding: 2rem 1.5rem;
+        }
+    }
+
+    .finding-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .finding-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-heartbeat me-2"></i>AI Healthcare Diagnosis
+            </a>
+            <div class="d-flex">
+                <span class="navbar-text me-3">
+                    <i class="fas fa-user me-2"></i>Welcome, {{ session['user'] }}
+                </span>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-light">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h1 class="display-4 text-primary mb-3">Your Health, Our Priority</h1>
+                <p class="lead text-muted">Get instant medical diagnosis and recommendations using advanced AI technology</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <!-- Symptom Analysis Section -->
+                <div class="card shadow fade-in">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-stethoscope me-2"></i>Symptom Analysis
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="symptomForm">
+                            <div class="mb-4">
+                                <h5 class="text-primary">
+                                    <i class="fas fa-pen me-2"></i>Enter Your Symptoms
+                                </h5>
+                                <div class="input-group mb-3">
+                                    <input type="text" id="symptomInput" class="form-control" placeholder="Type a symptom...">
+                                    <button class="btn btn-outline-primary" type="button" id="addSymptom">
+                                        <i class="fas fa-plus me-1"></i>Add
+                                    </button>
+                                </div>
+                                <div id="selectedSymptoms" class="mb-3">
+                                    <!-- Selected symptoms will appear here as tags -->
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h5 class="text-primary">
+                                    <i class="fas fa-list me-2"></i>Common Symptoms
+                                </h5>
+                                <div class="symptom-checkboxes row">
+                                    <!-- Common symptoms will be loaded here -->
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-search me-2"></i>Get Diagnosis
+                                </button>
+                            </div>
+                        </form>
+
+                        <div id="loadingSpinner" class="text-center mt-4 d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Analyzing symptoms...</p>
+                        </div>
+
+                        <div id="diagnosisResult" class="mt-4 d-none fade-in">
+                            <h4 class="text-primary mb-4">
+                                <i class="fas fa-clipboard-check me-2"></i>Diagnosis Results
+                            </h4>
+                            <div id="predictedDisease" class="alert alert-info"></div>
+                            
+                            <div id="precautionsSection" class="mt-4 d-none fade-in">
+                                <h5 class="text-success mb-3">
+                                    <i class="fas fa-shield-alt me-2"></i>Precautions
+                                </h5>
+                                <ul id="precautions" class="list-group mb-3"></ul>
+                                <div class="d-grid">
+                                    <button id="showPrecautions" class="btn btn-success">
+                                        <i class="fas fa-list-check me-2"></i>Show Precautions
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="doctorSection" class="mt-4 d-none fade-in">
+                                <h5 class="text-info mb-3">
+                                    <i class="fas fa-user-md me-2"></i>Doctor Availability
+                                </h5>
+                                <div id="doctors" class="list-group mb-3"></div>
+                                <div class="d-grid">
+                                    <button id="showDoctors" class="btn btn-info">
+                                        <i class="fas fa-hospital me-2"></i>Check Doctor Availability
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Scan Analysis Section -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-microscope me-2"></i>Medical Scan Analysis
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="scan-type" class="form-label">Select Scan Type</label>
+                            <select class="form-select" id="scan-type" required>
+                                <option value="xray">X-Ray Scan</option>
+                                <option value="mri">MRI Scan</option>
+                                <option value="ct_scan">CT Scan</option>
+                            </select>
+                        </div>
+                        
+                        <div class="drop-zone scan-upload" data-upload-type="scan">
+                            <input type="file" class="file-input" accept="image/*" hidden>
+                            <div class="drop-zone-content text-center">
+                                <i class="fas fa-x-ray fa-3x mb-3 text-primary"></i>
+                                <h5 class="mb-2">Upload Medical Scan</h5>
+                                <p class="text-muted mb-3">Drag and drop your scan image here</p>
+                                <button type="button" class="btn btn-primary choose-file-btn">
+                                    <i class="fas fa-folder-open me-2"></i>Browse Files
+                                </button>
+                                <p class="text-muted small mt-2">Supported formats: JPG, PNG, JPEG</p>
+                            </div>
+                        </div>
+                        
+                        <div id="scan-results" class="mt-4">
+                            <!-- Scan analysis results will appear here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Report Analysis Section -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-file-medical-alt me-2"></i>Medical Report Analysis
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="drop-zone report-upload" data-upload-type="report">
+                            <input type="file" class="file-input" accept="image/*" hidden>
+                            <div class="drop-zone-content text-center">
+                                <i class="fas fa-file-medical fa-3x mb-3 text-info"></i>
+                                <h5 class="mb-2">Upload Medical Report</h5>
+                                <p class="text-muted mb-3">Drag and drop your report image here</p>
+                                <button type="button" class="btn btn-info choose-file-btn">
+                                    <i class="fas fa-folder-open me-2"></i>Browse Files
+                                </button>
+                                <p class="text-muted small mt-2">Supported formats: JPG, PNG, JPEG</p>
+                            </div>
+                        </div>
+                        
+                        <div id="report-results" class="mt-4">
+                            <!-- Report analysis results will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>AI Healthcare Diagnosis</h5>
+                    <p class="mb-0">Your trusted partner in healthcare</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">© 2024 AI Healthcare Diagnosis. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
